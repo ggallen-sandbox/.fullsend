@@ -28,4 +28,6 @@ agents:
     - role: review
       name: ggallen-sandbox-review
       slug: ggallen-sandbox-review
-repos: {}
+repos:
+    .fullsend:
+        enabled: false
