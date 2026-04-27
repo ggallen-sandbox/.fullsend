@@ -31,3 +31,5 @@ agents:
 repos:
     .fullsend:
         enabled: false
+    integration-service:
+        enabled: true
