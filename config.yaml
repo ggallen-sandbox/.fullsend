@@ -1,0 +1,31 @@
+# fullsend organization configuration
+# https://github.com/fullsend-ai/fullsend
+#
+# This file is managed by fullsend. Manual edits may be overwritten.
+version: "1"
+dispatch:
+    platform: github-actions
+inference:
+    provider: vertex
+defaults:
+    roles:
+        - fullsend
+        - triage
+        - coder
+        - review
+    max_implementation_retries: 2
+    auto_merge: false
+agents:
+    - role: fullsend
+      name: ggallen-sandbox-fullsend
+      slug: ggallen-sandbox-fullsend
+    - role: triage
+      name: ggallen-sandbox-triage
+      slug: ggallen-sandbox-triage
+    - role: coder
+      name: ggallen-sandbox-coder
+      slug: ggallen-sandbox-coder
+    - role: review
+      name: ggallen-sandbox-review
+      slug: ggallen-sandbox-review
+repos: {}
