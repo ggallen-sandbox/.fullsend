@@ -30,6 +30,7 @@ jobs:
     permissions:
       actions: write
       contents: read
+      id-token: write
       issues: write
 
     steps:
@@ -75,7 +76,15 @@ jobs:
           path: target-repo
           fetch-depth: 1
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (WIF)
+        if: secrets.FULLSEND_GCP_WIF_PROVIDER != ''
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ secrets.FULLSEND_GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.FULLSEND_GCP_WIF_SA_EMAIL }}
+
+      - name: Authenticate to Google Cloud (SA key)
+        if: secrets.FULLSEND_GCP_WIF_PROVIDER == ''
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.FULLSEND_GCP_SA_KEY_JSON }}
@@ -89,6 +98,9 @@ jobs:
             fi
           done
 
+      - name: Prepare sandbox credentials
+        run: bash scripts/prepare-sandbox-credentials.sh
+
       - name: Setup agent environment
         env:
           AGENT_PREFIX: TRIAGE_
@@ -97,9 +109,6 @@ jobs:
           TRIAGE_ANTHROPIC_VERTEX_PROJECT_ID: ${{ secrets.FULLSEND_GCP_PROJECT_ID }}
           TRIAGE_CLOUD_ML_REGION: ${{ vars.FULLSEND_GCP_REGION }}
         run: bash .github/scripts/setup-agent-env.sh
-
-      - name: Install validation dependencies
-        run: pip install --quiet "jsonschema>=4.18.0"
 
       - name: Run triage agent
         uses: ./.github/actions/fullsend
