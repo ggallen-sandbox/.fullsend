@@ -89,7 +89,7 @@ jobs:
 
       - name: Set GCP_OIDC_TOKEN_FILE for non-WIF
         if: vars.FULLSEND_USE_WIF != 'true'
-        run: echo "GCP_OIDC_TOKEN_FILE=" >> "${GITHUB_ENV}"
+        run: echo "GCP_OIDC_TOKEN_FILE=/dev/null" >> "${GITHUB_ENV}"
 
       - name: Mask GCP credential file paths
         run: |
