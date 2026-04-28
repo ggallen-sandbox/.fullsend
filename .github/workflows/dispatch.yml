@@ -25,6 +25,9 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Generate token for triggering workflows
         id: app-token
         uses: actions/create-github-app-token@v3
