@@ -1,3 +1,4 @@
+# fullsend-stage: code
 name: Code
 
 on:
@@ -12,12 +13,9 @@ on:
       event_payload:
         required: true
         type: string
-  repository_dispatch:
-    types:
-      - fullsend-code
 
 concurrency:
-  group: fullsend-code-${{ fromJSON(github.event_name == 'repository_dispatch' && github.event.client_payload.event_payload || inputs.event_payload).issue.number }}
+  group: fullsend-code-${{ fromJSON(inputs.event_payload).issue.number }}
   cancel-in-progress: true
 
 jobs:
@@ -25,8 +23,8 @@ jobs:
     name: Code
     runs-on: ubuntu-latest
     env:
-      DISPATCH_SOURCE_REPO: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.source_repo || inputs.source_repo }}
-      DISPATCH_EVENT_PAYLOAD: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.event_payload || inputs.event_payload }}
+      DISPATCH_SOURCE_REPO: ${{ inputs.source_repo }}
+      DISPATCH_EVENT_PAYLOAD: ${{ inputs.event_payload }}
     permissions:
       actions: write
       contents: write
