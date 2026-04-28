@@ -108,6 +108,10 @@ jobs:
         with:
           credentials_json: ${{ secrets.FULLSEND_GCP_SA_KEY_JSON }}
 
+      - name: Set GCP_OIDC_TOKEN_FILE for non-WIF
+        if: vars.FULLSEND_USE_WIF != 'true'
+        run: echo "GCP_OIDC_TOKEN_FILE=" >> "${GITHUB_ENV}"
+
       - name: Mask GCP credential file paths
         run: |
           for var in GOOGLE_GHA_CREDS_PATH GOOGLE_APPLICATION_CREDENTIALS CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE; do
